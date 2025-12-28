@@ -39,7 +39,7 @@ The system is built using a **Modular MLOps Architecture**, ensuring scalability
 │   ├── pipeline/       # Training and Prediction pipelines
 │   ├── utils.py        # Utility functions
 ├── templates/          # HTML files for the web UI
-├── app.py              # Main Flask application entry point
+├── main.py              # Main Flask application entry point
 ├── requirements.txt    # List of dependencies
 └── README.md           # Project documentation
 
