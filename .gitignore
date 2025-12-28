@@ -1,0 +1,16 @@
+myenv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+artifacts/*.pkl
+artifacts/*.csv
+mlartifacts/
+mlruns/
+artifacts/*.pkl
+mlflow.dbmlflow.db
+*.db
+mlflow.db
+*.db
+logs/

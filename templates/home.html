@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attrition Risk Intelligence</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        body { 
+            background: var(--bg-gradient); 
+            min-height: 100vh;
+            padding: 30px 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            color: #333;
+        }
+
+        .main-card { 
+            max-width: 800px; /* ফর্মের লেন্থ বা প্রস্থ কমানো হয়েছে */
+            margin: auto;
+            background: #ffffff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1); 
+        }
+
+        .header-section { text-align: center; margin-bottom: 35px; }
+        .header-title { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); margin-bottom: 8px; }
+        .sub-header { color: #7f8c8d; font-size: 0.9rem; }
+
+        .result-box { 
+            border-radius: 12px; 
+            padding: 25px; 
+            margin-bottom: 35px; 
+            background: #fdfdfd;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .section-title { 
+            font-size: 1.1rem;
+            margin: 35px 0 20px; 
+            font-weight: 700; 
+            color: var(--primary-color);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 12px;
+        }
+
+        label { font-weight: 600; font-size: 0.85rem; color: #444; margin-bottom: 8px; display: block; }
+        
+        .form-control, .form-select {
+            width: 100%;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-analyze {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            width: 100%;
+            margin-top: 40px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-analyze:hover { background: #1a252f; }
+
+        .row { display: flex; flex-wrap: wrap; margin-right: -10px; margin-left: -10px; }
+        .col-md-3 { flex: 0 0 25%; max-width: 25%; padding: 10px; box-sizing: border-box; }
+        .col-md-4 { flex: 0 0 33.33%; max-width: 33.33%; padding: 10px; box-sizing: border-box; }
+        .col-md-12 { flex: 0 0 100%; max-width: 100%; padding: 10px; box-sizing: border-box; }
+
+        @media (max-width: 768px) {
+            .col-md-3, .col-md-4 { flex: 0 0 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        <div class="header-section">
+            <h1 class="header-title">Employee Attrition Risk Intelligence</h1>
+            <p class="sub-header">Factor Analysis for Bangladesh Corporate Sector</p>
+        </div>
+
+        {% if results %}
+        <div class="result-box" style="border-top: 6px solid {% if result_class=='danger' %}#dc3545{% else %}#198754{% endif %};">
+            <h3 style="color: {% if result_class=='danger' %}#dc3545{% else %}#198754{% endif %}; font-weight: 800;">{{ results }}</h3>
+            <p><strong>XAI Factors:</strong> {{ sub_results }}</p>
+            <div style="display: flex; justify-content: space-between; margin-top: 15px; color: #666; font-size: 0.85rem;">
+                <span><strong>Confidence:</strong> {{ confidence }}</span>
+                <span><strong>Action:</strong> {{ recommendation }}</span>
+            </div>
+        </div>
+        {% endif %}
+
+        <form action="/predictdata" method="post">
+            <div class="section-title">Personal Info</div>
+            <div class="row">
+                <div class="col-md-3"><label>Age</label>
+                    <input type="number" name="Age" class="form-control" value="{{ request.form['Age'] }}" required>
+                </div>
+                <div class="col-md-3"><label>Gender</label>
+                    <select name="Gender" class="form-select">
+                        <option value="Male" {% if request.form['Gender'] == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if request.form['Gender'] == 'Female' %}selected{% endif %}>Female</option>
+                    </select>
+                </div>
+                <div class="col-md-3"><label>Marital Status</label>
+                    <select name="MaritalStatus" class="form-select">
+                        <option value="Married" {% if request.form['MaritalStatus'] == 'Married' %}selected{% endif %}>Married</option>
+                        <option value="Unmarried" {% if request.form['MaritalStatus'] == 'Unmarried' %}selected{% endif %}>Unmarried</option>
+                    </select>
+                </div>
+                <div class="col-md-3"><label>Education</label>
+                    <select name="Education" class="form-select">
+                        {% for edu in ['Post Graduate', 'Graduate', 'Diploma', 'HSC'] %}
+                        <option value="{{ edu }}" {% if request.form['Education'] == edu %}selected{% endif %}>{{ edu }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-title">Employment Details</div>
+            <div class="row">
+                <div class="col-md-4"><label>Department</label>
+                    <select name="Department" class="form-select">
+                        {% for dept in ['IT', 'Medical', 'Education', 'Sales', 'Human Resources', 'Marketing', 'Others'] %}
+                        <option value="{{ dept }}" {% if request.form['Department'] == dept %}selected{% endif %}>{{ dept }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4"><label>Monthly Income (৳)</label>
+                    <input type="number" name="MonthlyIncome" class="form-control" value="{{ request.form['MonthlyIncome'] }}" required>
+                </div>
+                <div class="col-md-4"><label>Overtime</label>
+                    <select name="OverTime" class="form-select">
+                        <option value="No" {% if request.form['OverTime'] == 'No' %}selected{% endif %}>No</option>
+                        <option value="Yes" {% if request.form['OverTime'] == 'Yes' %}selected{% endif %}>Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-title">Experience & Logistics</div>
+            <div class="row">
+                <div class="col-md-3"><label>Total Exp.</label>
+                    <input type="number" name="TotalWorkingYears" class="form-control" value="{{ request.form['TotalWorkingYears'] }}" required>
+                </div>
+                <div class="col-md-3"><label>At Company</label>
+                    <input type="number" name="YearsAtCompany" class="form-control" value="{{ request.form['YearsAtCompany'] }}" required>
+                </div>
+                <div class="col-md-3"><label>Current Role</label>
+                    <input type="number" name="YearsInCurrentRole" class="form-control" value="{{ request.form['YearsInCurrentRole'] }}" required>
+                </div>
+                <div class="col-md-3"><label>Promotion</label>
+                    <input type="number" name="YearsSinceLastPromotion" class="form-control" value="{{ request.form['YearsSinceLastPromotion'] }}" required>
+                </div>
+                <div class="col-md-12"><label>Distance from Home (km)</label>
+                    <input type="number" name="DistanceFromHome" class="form-control" value="{{ request.form['DistanceFromHome'] }}" required>
+                </div>
+            </div>
+
+            <div class="section-title">Satisfaction (1-5)</div>
+            <div class="row">
+                <div class="col-md-3"><label>Job Sat.</label>
+                    <input type="number" name="JobSatisfaction" min="1" max="5" class="form-control" value="{{ request.form['JobSatisfaction'] }}" required>
+                </div>
+                <div class="col-md-3"><label>Env. Sat.</label>
+                    <input type="number" name="EnvironmentSatisfaction" min="1" max="5" class="form-control" value="{{ request.form['EnvironmentSatisfaction'] }}" required>
+                </div>
+                <div class="col-md-3"><label>Relation Sat.</label>
+                    <input type="number" name="RelationshipSatisfaction" min="1" max="5" class="form-control" value="{{ request.form['RelationshipSatisfaction'] }}" required>
+                </div>
+                <div class="col-md-3"><label>Work-Life Balance</label>
+                    <input type="number" name="WorkLifeBalance" min="1" max="5" class="form-control" value="{{ request.form['WorkLifeBalance'] }}" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-analyze">IDENTIFY RETENTION RISKS</button>
+        </form>
+    </div>
+</body>
+</html>

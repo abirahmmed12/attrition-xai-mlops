@@ -1,0 +1,16 @@
+
+🎓 THESIS DEFENSE: MODEL DEEP DIVE
+
+
+1. STABILITY ANALYSIS (5-Fold CV)
+----------------------------------------
+Mean Accuracy: 0.9156
+Mean F1 Score: 0.9107
+
+2. ADVANCED METRICS (Test Set)
+----------------------------------------
+Accuracy:      0.9032
+Macro F1:      0.9016
+MCC Score:     0.8051
+Kappa Score:   0.8034
+Log Loss:      0.2453

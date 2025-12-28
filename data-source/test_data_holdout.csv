@@ -1,0 +1,32 @@
+Age,MonthlyIncome,TotalWorkingYears,YearsAtCompany,YearsInCurrentRole,YearsSinceLastPromotion,MaritalStatus,Gender,JobSatisfaction,EnvironmentSatisfaction,RelationshipSatisfaction,WorkLifeBalance,Education,Department,OverTime,DistanceFromHome,Attrition
+48.0,60000.0,23.0,17.0,11.0,4.0,Married,Female,3.0,4.0,3.0,3.0,Post Graduate,Medical,No,8.0,No
+56.0,60000.0,24.0,17.0,3.0,3.0,Married,Male,3.0,3.0,3.0,3.0,Post Graduate,Education,No,28.0,Yes
+38.0,50000.0,10.0,7.0,4.0,4.0,Married,Male,5.0,5.0,5.0,4.0,Post Graduate,Human Resources,No,22.0,No
+56.0,60000.0,18.0,11.0,6.0,4.0,Married,Male,5.0,5.0,5.0,5.0,Post Graduate,Education,No,3.0,No
+52.0,50000.0,28.0,15.0,4.0,4.0,Married,Male,5.0,5.0,5.0,5.0,Post Graduate,Human Resources,No,19.0,No
+30.0,60000.0,4.0,4.0,1.0,2.0,Married,Male,4.0,3.0,4.0,3.0,Graduate,IT,No,6.0,No
+24.0,15000.0,2.0,2.0,2.0,0.0,Unmarried,Male,1.0,1.0,3.0,3.0,HSC,IT,No,16.0,Yes
+32.0,60000.0,9.0,6.0,4.0,2.0,Married,Male,3.0,4.0,3.0,3.0,Graduate,Marketing,No,2.0,No
+25.0,30000.0,2.0,2.0,1.0,0.0,Unmarried,Male,3.0,2.0,3.0,3.0,Diploma,Sales,Yes,8.0,Yes
+32.0,30000.0,8.0,6.0,4.0,4.0,Married,Male,3.0,2.0,2.0,3.0,Diploma,Others,Yes,4.0,Yes
+26.0,30000.0,3.0,3.0,2.0,0.0,Unmarried,Male,2.0,2.0,2.0,2.0,HSC,Sales,Yes,3.0,Yes
+25.0,30000.0,5.0,5.0,2.0,1.0,Unmarried,Male,3.0,5.0,3.0,1.0,Diploma,IT,No,0.0,No
+38.0,30000.0,3.0,3.0,2.0,0.0,Married,Male,3.0,3.0,2.0,1.0,Graduate,Sales,Yes,7.0,Yes
+26.0,20000.0,3.0,0.0,3.0,0.0,Unmarried,Female,1.0,1.0,1.0,3.0,Graduate,IT,Yes,4.0,Yes
+37.0,30000.0,12.0,7.0,4.0,4.0,Married,Female,3.0,2.0,2.0,2.0,Graduate,Human Resources,No,5.0,Yes
+29.0,30000.0,9.0,6.0,4.0,3.5,Unmarried,Male,5.0,5.0,5.0,4.0,Graduate,Marketing,No,17.0,No
+29.0,30000.0,3.0,3.0,3.0,1.5,Unmarried,Male,3.0,3.0,3.0,3.0,Graduate,Education,No,3.0,No
+21.0,15000.0,1.0,1.0,1.0,0.0,Unmarried,Female,3.0,3.0,3.0,3.0,HSC,Sales,No,2.0,No
+44.0,50000.0,15.0,9.0,5.0,5.0,Married,Female,3.0,2.0,4.0,2.0,Graduate,Marketing,Yes,9.0,Yes
+28.0,50000.0,5.0,2.0,2.0,1.0,Unmarried,Male,5.0,5.0,5.0,4.0,Graduate,IT,No,10.0,No
+50.0,30000.0,21.0,12.0,4.0,4.0,Married,Female,5.0,5.0,5.0,4.0,Post Graduate,Education,No,7.0,No
+29.0,30000.0,8.0,8.0,4.0,4.0,Married,Female,1.0,1.0,3.0,1.0,Diploma,Medical,Yes,4.0,Yes
+21.0,15000.0,1.0,1.0,1.0,0.0,Unmarried,Female,1.0,1.0,2.0,2.0,HSC,Others,No,4.0,Yes
+25.0,30000.0,3.0,1.0,1.0,1.0,Unmarried,Male,3.0,3.0,3.0,3.0,HSC,Other,No,0.0,No
+57.0,60000.0,10.0,8.0,8.0,3.0,Married,Male,5.0,5.0,4.0,4.0,Post Graduate,Medical,Yes,1.0,No
+30.0,30000.0,7.0,5.0,5.0,4.0,Married,Male,1.0,4.0,3.0,1.0,Graduate,Sales,Yes,4.8,No
+27.0,60000.0,3.5,2.0,2.0,1.0,Married,Female,5.0,5.0,4.0,4.0,Graduate,Medical,Yes,3.0,No
+47.0,60000.0,14.0,9.0,5.0,3.0,Married,Male,5.0,5.0,5.0,4.0,Post Graduate,Education,No,18.0,No
+23.0,15000.0,1.8,1.8,1.8,0.0,Unmarried,Female,3.0,3.0,2.0,2.0,HSC,IT,No,0.0,Yes
+26.0,30000.0,6.0,2.0,0.0,0.0,Unmarried,Male,1.0,1.0,3.0,2.0,Diploma,IT,Yes,3.0,Yes
+38.0,30000.0,11.0,7.0,3.0,3.0,Married,Male,5.0,4.0,4.0,4.0,Post Graduate,Human Resources,No,8.0,No
