@@ -18,7 +18,7 @@ The system is built using a **Modular MLOps Architecture**, ensuring scalability
     * **MLflow:** For experiment tracking and model versioning.
     * **DVC:** For data version control.
     * **Modular Code:** Clean, production-ready code structure.
-* **📊 Interactive UI:** User-friendly web interface built with **Flask**, HTML, and CSS.
+* ** Interactive UI:** User-friendly web interface built with **Flask**, HTML, and CSS.
 
 ## 🛠️ Tech Stack
 * **Language:** Python
