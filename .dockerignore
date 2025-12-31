@@ -1,0 +1,27 @@
+cat <<EOF > .dockerignore
+# Virtual Environments (Hidden & Visible)
+.venv/
+venv/
+myenv/
+env/
+
+# Large Artifacts & Logs
+mlartifacts/
+logs/
+feature_store/
+data-source/
+mlflow.db
+
+# Git & System Files
+.git/
+.gitignore
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# Docker Files (Optional to ignore)
+docker-compose.yaml
+Dockerfile
+EOF

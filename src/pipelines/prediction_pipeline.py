@@ -20,46 +20,47 @@ class PredictPipeline:
             return
             
         try:
-            print(f" Loading model from {self.model_path}...")
-            start = time.time()
+            # শুধু স্টার্টআপের সময় এই মেসেজ আসবে, প্রেডিকশনের সময় না
+            print("Loading models into memory...")
             self.model = load_object(file_path=self.model_path)
-            print(f"Model loaded in {time.time() - start:.2f}s")
-            
-            print(f" Loading preprocessor from {self.preprocessor_path}...")
-            start = time.time()
             self.preprocessor = load_object(file_path=self.preprocessor_path)
-            print(f" Preprocessor loaded in {time.time() - start:.2f}s")
-            
             self._loaded = True
-            print(" All models ready for inference!")
+            print("Models loaded successfully!")
             
         except Exception as e:
-            print(f" Error loading models: {str(e)}")
             raise CustomException(e, sys)
 
     def predict(self, features):
         try:
             # Safety check
             if not self._loaded or self.model is None or self.preprocessor is None:
-                print(" Models not loaded, loading now...")
                 self.load_models()
             
-            # Fast inference
+            # 1. Preprocessing
             data_scaled = self.preprocessor.transform(features)
-            preds = self.model.predict(data_scaled)
-            
+
+            # 2. Prediction (Optimized & Clean)
             if hasattr(self.model, "predict_proba"):
-                prob_leaving = self.model.predict_proba(data_scaled)[0, 1]
+                # শুধু একবার মডেল কল করছি (Time saving)
+                prob_arr = self.model.predict_proba(data_scaled)
+                prob_leaving = prob_arr[0, 1]
                 
+                prediction = 1 if prob_leaving >= 0.5 else 0
+                
+                # Confidence Calculation
                 if 0.45 < prob_leaving < 0.55: 
                     confidence = "Low"
                 elif 0.35 < prob_leaving < 0.65: 
                     confidence = "Moderate"
                 else: 
                     confidence = "High"
-                    
-                return int(preds[0]), prob_leaving, confidence
-            return int(preds[0]), 0.5, "Unknown"
+                
+                return prediction, prob_leaving, confidence
+            
+            else:
+                # Fallback for models without predict_proba
+                preds = self.model.predict(data_scaled)
+                return int(preds[0]), 0.5, "Unknown"
             
         except Exception as e:
             raise CustomException(e, sys)
@@ -69,39 +70,45 @@ class PredictPipeline:
             negatives = []
             positives = []
             
-            if float(df['JobSatisfaction'].iloc[0]) <= 2: 
+            # Helper functions to avoid crashes
+            def get_val(col):
+                return float(df[col].iloc[0]) if col in df.columns else 0
+
+            def get_str(col):
+                return df[col].iloc[0] if col in df.columns else ""
+
+            # Rules Engine
+            if get_val('JobSatisfaction') <= 2: 
                 negatives.append("Low Job Satisfaction")
             
-            if df['OverTime'].iloc[0] == 'Yes': 
+            if get_str('OverTime') == 'Yes': 
                 negatives.append("Excessive Overtime")
             
-            if float(df['MonthlyIncome'].iloc[0]) < 30000: 
+            if get_val('MonthlyIncome') < 30000: 
                 negatives.append("Low Salary Bracket")
             
-            if float(df['YearsSinceLastPromotion'].iloc[0]) > 3: 
+            if get_val('YearsSinceLastPromotion') > 3: 
                 negatives.append("Career Stagnation")
             
-            if float(df['WorkLifeBalance'].iloc[0]) <= 2: 
+            if get_val('WorkLifeBalance') <= 2: 
                 negatives.append("Poor Work-Life Balance")
             
-            if float(df['DistanceFromHome'].iloc[0]) > 20:
+            if get_val('DistanceFromHome') > 20:
                 negatives.append("Long Commute")
             
-            if float(df['TotalWorkingYears'].iloc[0]) > 10: 
+            if get_val('TotalWorkingYears') > 10: 
                 positives.append("High Experience")
             
-            if (float(df['YearsAtCompany'].iloc[0]) > 5 and 
-                float(df['JobSatisfaction'].iloc[0]) >= 3):
+            if (get_val('YearsAtCompany') > 5 and get_val('JobSatisfaction') >= 3):
                 positives.append("Company Loyalty")
             
-            if df['MaritalStatus'].iloc[0] == 'Married': 
+            if get_str('MaritalStatus') == 'Married': 
                 positives.append("Family Stability")
             
-            if (float(df['YearsSinceLastPromotion'].iloc[0]) <= 1 and 
-                float(df['JobSatisfaction'].iloc[0]) >= 3):
+            if (get_val('YearsSinceLastPromotion') <= 1 and get_val('JobSatisfaction') >= 3):
                 positives.append("Recent Career Growth")
             
-            if float(df['MonthlyIncome'].iloc[0]) > 50000:
+            if get_val('MonthlyIncome') > 50000:
                 positives.append("Competitive Salary")
 
             return {'negatives': negatives, 'positives': positives}
@@ -117,13 +124,25 @@ class CustomData:
         try:
             df = pd.DataFrame([self.data])
             
+            # Feature Engineering with Safety Checks
             satisfaction_cols = ['JobSatisfaction', 'EnvironmentSatisfaction', 'RelationshipSatisfaction']
-            df['TotalSatisfaction'] = df[satisfaction_cols].mean(axis=1)
             
-            df['YearsPerPromotion'] = (df['YearsSinceLastPromotion'] + 1) / (df['YearsAtCompany'] + 1)
-            
-            overtime_num = df['OverTime'].map({'Yes': 1, 'No': 0}).fillna(0)
-            df['OvertimeStress'] = overtime_num / (df['WorkLifeBalance'] + 0.5)
+            if all(col in df.columns for col in satisfaction_cols):
+                df['TotalSatisfaction'] = df[satisfaction_cols].astype(float).mean(axis=1)
+            else:
+                df['TotalSatisfaction'] = 0 
+
+            if 'YearsSinceLastPromotion' in df.columns and 'YearsAtCompany' in df.columns:
+                denom = df['YearsAtCompany'].astype(float) + 1
+                df['YearsPerPromotion'] = (df['YearsSinceLastPromotion'].astype(float) + 1) / denom
+            else:
+                df['YearsPerPromotion'] = 0
+
+            if 'OverTime' in df.columns and 'WorkLifeBalance' in df.columns:
+                overtime_num = df['OverTime'].map({'Yes': 1, 'No': 0}).fillna(0)
+                df['OvertimeStress'] = overtime_num / (df['WorkLifeBalance'].astype(float) + 0.5)
+            else:
+                df['OvertimeStress'] = 0
             
             return df
         except Exception as e:

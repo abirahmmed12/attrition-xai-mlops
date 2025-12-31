@@ -20,7 +20,7 @@
         }
 
         .main-card { 
-            max-width: 800px; /* ফর্মের লেন্থ বা প্রস্থ কমানো হয়েছে */
+            max-width: 800px;
             margin: auto;
             background: #ffffff; 
             padding: 40px; 
@@ -67,6 +67,7 @@
             box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
         }
 
+        /* --- BUTTON STYLES --- */
         .btn-analyze {
             background: var(--primary-color);
             color: white;
@@ -79,9 +80,40 @@
             margin-top: 40px;
             cursor: pointer;
             transition: background 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .btn-analyze:hover { background: #1a252f; }
+
+        /* --- LOADING ANIMATION STYLES --- */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+            display: none; /* Initially hidden */
+        }
+
+        .btn-loading {
+            background-color: #34495e !important;
+            cursor: not-allowed;
+            opacity: 0.9;
+            pointer-events: none; /* Prevent double clicks */
+        }
+
+        .btn-loading .loader {
+            display: inline-block; /* Show spinner when loading */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
         .row { display: flex; flex-wrap: wrap; margin-right: -10px; margin-left: -10px; }
         .col-md-3 { flex: 0 0 25%; max-width: 25%; padding: 10px; box-sizing: border-box; }
@@ -111,7 +143,7 @@
         </div>
         {% endif %}
 
-        <form action="/predictdata" method="post">
+        <form action="/predictdata" method="post" id="predictionForm">
             <div class="section-title">Personal Info</div>
             <div class="row">
                 <div class="col-md-3"><label>Age</label>
@@ -193,8 +225,31 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-analyze">IDENTIFY RETENTION RISKS</button>
+            <button type="submit" class="btn-analyze" id="predictBtn">
+                <span class="loader"></span>
+                <span id="btnText">IDENTIFY RETENTION RISKS</span>
+            </button>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.getElementById('predictionForm');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    var btn = document.getElementById('predictBtn');
+                    var btnText = document.getElementById('btnText');
+                    
+                    if(btn && btnText) {
+                        // Add loading class to button
+                        btn.classList.add('btn-loading');
+                        
+                        // Change Text to show Technical Process
+                        btnText.innerHTML = "Running TabPFN Neural Network... Please Wait";
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

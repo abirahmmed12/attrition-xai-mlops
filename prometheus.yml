@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'flask_app_monitoring'
+    metrics_path: '/metrics'
+    static_configs:
+      # আগে ছিল localhost, এখন হবে কন্টেইনারের নাম (web_app)
+      - targets: ['web_app:5000']
